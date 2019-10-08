@@ -1,9 +1,9 @@
 # Terraform Provider for an Example Expense API
 
-For the original API, see
-[here](https://github.com/joatmon08/dotnet-service-mesh-example).
 
 ## Start
+
+Download [this example](https://github.com/joatmon08/dotnet-service-mesh-example).
 
 Run:
 
