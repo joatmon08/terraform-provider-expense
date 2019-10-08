@@ -46,7 +46,7 @@ func TestAccResourceExpenseCreate(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckExpenseDestroy,
+		CheckDestroy: testAccCheckExpenseDelete("expense_item.test", expense),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCheckExpenseConfig_basic(name, tripID, currency, date, cost),
@@ -83,7 +83,7 @@ func TestAccResourceExpenseUpdate(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckExpenseDestroy,
+		CheckDestroy: testAccCheckExpenseDelete("expense_item.test", expense),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCheckExpenseConfig_basic(name, tripID, currency, date, cost),
@@ -135,8 +135,26 @@ func testAccCheckExpenseConfig_newcost(name string, tripId string, currency stri
 	`, name, currency, cost, date, tripId)
 }
 
-func testAccCheckExpenseDestroy(s *terraform.State) error {
-	return nil
+func testAccCheckExpenseDelete(n string, expense *Expense) resource.TestCheckFunc {
+	return func(s *terraform.State) error {
+		rs, ok := s.RootModule().Resources[n]
+
+		if !ok {
+			return fmt.Errorf("not found: %s", n)
+		}
+
+		var config Config
+		if err := config.LoadAndValidate(); err != nil {
+			return err
+		}
+
+		_, err := config.Client.GetExpenseByID(rs.Primary.ID)
+		if err == nil {
+			return fmt.Errorf("should be deleted: %s", n)
+		}
+
+		return nil
+	}
 }
 
 func testAccCheckExpenseExists(n string, expense *Expense) resource.TestCheckFunc {
