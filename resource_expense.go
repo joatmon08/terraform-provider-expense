@@ -74,28 +74,9 @@ func resourceExpenseRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceExpenseUpdate(d *schema.ResourceData, m interface{}) error {
-	config := m.(*Config)
-	expense := &Expense{
-		ID:       d.Id(),
-		Name:     d.Get("name").(string),
-		TripID:   d.Get("trip_id").(string),
-		Cost:     d.Get("cost").(float64),
-		Currency: d.Get("currency").(string),
-		Date:     d.Get("date").(string),
-	}
-	err := config.Client.UpdateExpense(expense)
-	if err != nil {
-		return err
-	}
 	return resourceExpenseRead(d, m)
 }
 
 func resourceExpenseDelete(d *schema.ResourceData, m interface{}) error {
-	config := m.(*Config)
-	err := config.Client.DeleteExpense(d.Id())
-	if err != nil {
-		return err
-	}
-	d.SetId("")
 	return nil
 }
