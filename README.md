@@ -3,6 +3,16 @@
 For the original API, see
 [here](https://github.com/joatmon08/dotnet-service-mesh-example).
 
+## Start
+
+Run:
+
+```shell
+docker-compose up -d
+```
+
+This will create the API stack.
+
 ## Tests
 
 Start by running the following to check acceptance tests. Make sure
