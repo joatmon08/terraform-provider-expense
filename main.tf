@@ -1,0 +1,1 @@
+resource "expense_item" "hello" {}
